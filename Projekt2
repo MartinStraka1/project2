@@ -7,33 +7,19 @@ discord: martinstraka_93260
 import random
 # definice funkce pro vytisknutí horizontálního oddělení pomlčkami
 def oddeleni():
-    print("-"*50)   
+    print("-"*50) 
+# definice funkce pro nalezení 4 unikátních čísel
+def random_4_number():
+    digits = random.sample(range(10), 4)
+    if digits[0] == 0:
+        return random_4_number()
+    return ''.join(map(str, digits))
 print("Hi there!")
 oddeleni()
 print("I've generated a random 4 digit number for you.")
 print("Let's play a bulls and cows game.")
 oddeleni()
-problem = False
-ranCelk = str("")
-# nalezení náhodného čísla
-while not problem:
-    problem = True
-    for i in range (0, 4):
-        if i == 0: 
-            ranInt = random.randrange(1,10)
-        elif i > 0:
-            ranInt = random.randrange(0,10)
-        ranStr = str(ranInt)
-        ranCelk = ranCelk + ranStr
-    sortuj = ''.join(sorted(ranCelk))
-    c = str("")
-    for i in sortuj:
-        if c == i:
-            problem = False
-            ranCelk = ""
-            break
-        else: problem = True
-        c = i
+rnd = random_4_number()
 bulls = int
 problem = False
 poc = int(0)
@@ -47,6 +33,7 @@ while bulls != 4:
         if poc == 0:
                 print("Enter a number")
         tip = input(">>>")
+        tip = tip.strip()
         problem = True
         if len(tip) != 4:
             if problem:
@@ -76,17 +63,11 @@ while bulls != 4:
         else: 
             if problem:
                 poc += 1
-    bulls = 0
-    cows = 0
-    for i in tip:
-        for j in ranCelk:
-            if i == j and tip.index(i) == ranCelk.index(j):
-                bulls += 1
-            if i == j and tip.index(i) != ranCelk.index(j):
-                cows += 1
+    bulls = sum(1 for i in range(4) if tip[i] == rnd[i])
+    cows = sum(1 for i in range(4) if tip[i] in rnd and tip[i] != rnd[i])
     if bulls < 4: 
         problem = False
-        print(bulls," bulls, ",cows," cows")
+        print(f"{bulls} bulls, {cows} cows")
         oddeleni()
     else:
         print("Correct, you've guessed the right number\nin",poc,"guesses!!")
